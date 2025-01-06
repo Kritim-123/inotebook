@@ -1,7 +1,8 @@
-const connectToMongo = require("./db");
+import connectToMongo from "./db.js";
+import express from "express";
+
 connectToMongo();
 
-const express = require("express");
 const app = express();
 const port = 2700;
 
