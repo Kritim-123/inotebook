@@ -1,5 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
+const {Schema} = mongoose;
+
 const UsersSchema = new Schema({
   name: { type: String },
   nested: {
@@ -18,4 +20,4 @@ const UsersSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model('user', UsersSchema);
+export const User = mongoose.model('user', UsersSchema);
