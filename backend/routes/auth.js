@@ -10,7 +10,7 @@ authRoute.post(
   [
     body("email", "Enter a valid email").isEmail(),
     body("name", "Enter a valid name").isLength({ min: 3 }),
-    body("password").isLength({ min: 5 }),
+    body("password", "Password must be of length 5").isLength({ min: 5 }),
   ],
   async (req, res) => {
     // Validate request body
