@@ -13,7 +13,7 @@ app.use(express.json());
 //Available Routes
 
 app.use("/api/auth", authRoute);
-app.use("/api/note", noteRoute);
+app.use("/api/notes", noteRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
