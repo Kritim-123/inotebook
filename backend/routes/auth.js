@@ -1,9 +1,12 @@
 import express from "express";
-import {User} from "../models/User.js";
+import { User } from "../models/User.js";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const authRoute = express.Router();
+
+const JWT_SECRET = "kritim$b1"; // Put in a secret file
 
 // Create a User using: POST "/api/auth/createUser". Doesn't require Auth
 authRoute.post(
@@ -38,7 +41,15 @@ authRoute.post(
         password: secPass,
       });
 
-      res.json(user);
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      const authToken = jwt.sign(data, JWT_SECRET);
+      res.json(authToken);
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Server error" });
@@ -46,4 +57,50 @@ authRoute.post(
   }
 );
 
-export {authRoute};
+// Authenticate a User using: POST "/api/auth/login". Doesn't require Auth
+
+authRoute.post(
+  "/login",
+  [body("email", "Enter a valid email").isEmail(),
+    body("password", "Password cannot be blank").exists(), //Password cannot be blank
+  ],
+  async (req, res) => {
+    // Validate request body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // Corrected HTTP status code
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {email, password} = req.body;
+
+    try{
+      let user = await User.findOne({email});
+      if(!user){
+        return res.status(400).json({error: "Please try to login with correct credentials"});
+      }
+
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if(!passwordCompare){
+        return res.status(400).json({error: "Please try to login with correct credentials"});
+      }
+
+
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      const authToken = jwt.sign(data, JWT_SECRET); //signing the token using my secret key
+      res.json(authToken);
+
+
+    }catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
+
+export { authRoute };
