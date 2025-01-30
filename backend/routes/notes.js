@@ -60,28 +60,67 @@ noteRoute.post(
 
 noteRoute.put("/updatenote/:id", fetchuser, async (req, res) => {
   try {
-    const {title, description, tag} = req.body;
+    const { title, description, tag } = req.body;
 
     //Create a newNote object
 
     const newNote = {};
 
-    if(title){newNote.title = title};
-    if(description){newNote.description = description};
-    if(tag){newNote.tag = tag};
+    if (title) {
+      newNote.title = title;
+    }
+    if (description) {
+      newNote.description = description;
+    }
+    if (tag) {
+      newNote.tag = tag;
+    }
 
     // Find the note to be updated
     let note = await Notes.findById(req.params.id);
 
-    if(!note){ return res.status(404),send("Not Found")}
-
-    if(note.user.toString() !== req.user.id){
-        return res.status(401).send("Not allowed")
+    if (!note) {
+      return res.status(404), send("Not Found");
     }
 
-    note = await Notes.findByIdAndUpdate(req.params.id, {$set: newNote}, {new:true})
-    res.json({note});
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send("Not allowed");
+    }
 
+    note = await Notes.findByIdAndUpdate(
+      req.params.id,
+      { $set: newNote },
+      { new: true }
+    );
+    res.json({ note });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ROUTE:4 Delete an exising note using: DELETE "/api/notes/deletenote". Login required
+
+noteRoute.delete("/updatenote/:id", fetchuser, async (req, res) => {
+  try {
+    const { title, description, tag } = req.body;
+
+    // Find the note to be deleted
+    let note = await Notes.findById(req.params.id);
+
+    if (!note) {
+      return res.status(404), send("Not Found");
+    }
+
+    // Allow deletion only if user owns this Note
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send("Not allowed");
+    }
+
+    note = await Notes.findByIdAndDelete(
+      req.params.id
+    );
+    res.json({ "Success" : "Note has been deleted", note : note});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
