@@ -101,7 +101,7 @@ noteRoute.put("/updatenote/:id", fetchuser, async (req, res) => {
 
 // ROUTE:4 Delete an exising note using: DELETE "/api/notes/deletenote". Login required
 
-noteRoute.delete("/updatenote/:id", fetchuser, async (req, res) => {
+noteRoute.delete("/deletenote/:id", fetchuser, async (req, res) => {
   try {
     const { title, description, tag } = req.body;
 
