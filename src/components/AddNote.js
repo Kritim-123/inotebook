@@ -69,7 +69,7 @@ export default function AddNote() {
           </label>
         </div>
         <button type="submit" className="btn btn-primary" onClick = {handleClick}>
-          Submit
+          Add Note
         </button>
       </form>
     </div>
