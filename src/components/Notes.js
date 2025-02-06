@@ -91,6 +91,8 @@ const Notes = () => {
                     aria-describedby="emailHelp"
                     value={note.etitle}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -104,6 +106,8 @@ const Notes = () => {
                     id="edescription"
                     value={note.edescription}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
 
@@ -131,6 +135,9 @@ const Notes = () => {
                 Close
               </button>
               <button
+                disabled={
+                  note.etitle.length < 5 || note.edescription.length < 5
+                }
                 data-bs-dismiss="modal"
                 type="button"
                 className="btn btn-primary"

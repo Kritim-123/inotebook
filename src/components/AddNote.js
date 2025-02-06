@@ -1,30 +1,23 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import noteContext from "../context/notes/notesContext";
 
 export default function AddNote() {
+  const context = useContext(noteContext);
+  const { addNote } = context;
 
-    const context = useContext(noteContext);
-    const { addNote } = context;
+  const [note, setNote] = useState({ title: "", description: "", tag: "" });
 
-    // const [note, setNote] = useState(title: "", description: "", tag: "")
+  const handleClick = (e) => {
+    e.preventDefault();
 
-    const [note, setNote] = useState({title : "", description : "", tag : ""})
+    addNote(note.title, note.description, note.tag);
 
-    const handleClick = (e) => {
+    setNote({ title: "", description: "", tag: "" });
+  };
 
-        e.preventDefault();
-
-        addNote(note.title, note.description, note.tag);
-
-    }
-
-
-    const onChange = (e) => {
-
-        setNote({...note, [e.target.name]:  e.target.value})
-
-    }
-
+  const onChange = (e) => {
+    setNote({ ...note, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="container my-3">
@@ -38,12 +31,13 @@ export default function AddNote() {
             type="text"
             className="form-control"
             id="title"
-            name= "title"
+            name="title"
             aria-describedby="emailHelp"
-
-            onChange= {onChange}
+            minLength={5}
+            required
+            value={note.title}
+            onChange={onChange}
           />
-
         </div>
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
@@ -51,11 +45,13 @@ export default function AddNote() {
           </label>
           <input
             type="text"
-            name= "description"
+            name="description"
             className="form-control"
             id="description"
-
-            onChange= {onChange}
+            minLength={5}
+            required
+            value={note.description}
+            onChange={onChange}
           />
         </div>
 
@@ -65,15 +61,20 @@ export default function AddNote() {
           </label>
           <input
             type="text"
-            name= "tag"
+            name="tag"
             className="form-control"
             id="tag"
-
-            onChange= {onChange}
+            value={note.tag}
+            onChange={onChange}
           />
         </div>
-       
-        <button type="submit" className="btn btn-primary" onClick = {handleClick}>
+
+        <button
+          disabled={note.title.length < 5 || note.description.length < 5}
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleClick}
+        >
           Add Note
         </button>
       </form>
