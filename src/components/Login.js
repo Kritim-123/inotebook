@@ -1,11 +1,78 @@
-import React from 'react'
+import React, { useState } from "react";
+
 
 const Login = () => {
+
+
+    const [credentials, setcredentials] = useState({email : "", password: ""})
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:2700/api/auth/login", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({ email : credentials.email, password : credentials.password })
+    });
+
+    const json = await response.json();
+
+    console.log(json);
+
+
+  };
+
+  const onChange = (e) => {
+        
+    setcredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
   return (
     <div>
-      Login
-    </div>
-  )
-}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="email">Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            name = "email"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            value = {credentials.email}
+            onChange={onChange}
+          />
+          <small id="email" name="email" className="form-text text-muted">
+            We'll never share your email with anyone else.
+          </small>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            placeholder="Password"
+            value = {credentials.password}
+            onChange={onChange}
+          />
+        </div>
 
-export default Login
+        <button
+          type="submit"
+          className="btn btn-primary my-2"
+          
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
