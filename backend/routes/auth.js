@@ -66,6 +66,7 @@ authRoute.post(
     body("password", "Password cannot be blank").exists(), //Password cannot be blank
   ],
   async (req, res) => {
+    let success = false;
     // Validate request body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -78,16 +79,18 @@ authRoute.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
+        success = false
         return res
           .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+          .json({success,  error: "Please try to login with correct credentials" });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+        success = false
         return res
           .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+          .json({ success, error: "Please try to login with correct credentials" });
       }
 
       const data = {
@@ -97,10 +100,12 @@ authRoute.post(
       };
 
       const authToken = jwt.sign(data, JWT_SECRET); //signing the token using my secret key
-      res.json(authToken);
+      success = true;
+      res.json({success, authToken});
+
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({success,  error: "Internal server error" });
     }
   }
 );

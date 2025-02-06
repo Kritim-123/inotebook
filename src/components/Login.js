@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-
-
-    const [credentials, setcredentials] = useState({email : "", password: ""})
+  const [credentials, setcredentials] = useState({ email: "", password: "" });
+  let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,21 +12,32 @@ const Login = () => {
       method: "POST",
 
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({ email : credentials.email, password : credentials.password })
+      body: JSON.stringify({
+        email: credentials.email,
+        password: credentials.password,
+      }),
     });
 
     const json = await response.json();
 
     console.log(json);
 
+    if (json.success) {
+      //redirect
+      console.log("Success");
 
+      localStorage.setItem("token", json.authToken);
+      navigate("/")
+
+    } else {
+      alert("Invalid Credentials");
+    }
   };
 
   const onChange = (e) => {
-        
     setcredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
@@ -40,10 +50,10 @@ const Login = () => {
             type="email"
             className="form-control"
             id="email"
-            name = "email"
+            name="email"
             aria-describedby="emailHelp"
             placeholder="Enter email"
-            value = {credentials.email}
+            value={credentials.email}
             onChange={onChange}
           />
           <small id="email" name="email" className="form-text text-muted">
@@ -58,16 +68,12 @@ const Login = () => {
             id="password"
             name="password"
             placeholder="Password"
-            value = {credentials.password}
+            value={credentials.password}
             onChange={onChange}
           />
         </div>
 
-        <button
-          type="submit"
-          className="btn btn-primary my-2"
-          
-        >
+        <button type="submit" className="btn btn-primary my-2">
           Submit
         </button>
       </form>
