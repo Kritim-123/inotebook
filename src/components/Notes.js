@@ -3,7 +3,7 @@ import noteContext from "../context/notes/notesContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
 
@@ -35,14 +35,15 @@ const Notes = () => {
 
   const handleClick = (e) => {
     editNote(note.id, note.etitle, note.edescription, note.etag);
+    props.showAlert("Deleted note successfully", "success");
   };
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
   };
 
   return (
-    <>
-      <AddNote />
+    <div className="container mx-5">
+      <AddNote showAlert = {props.showAlert}/>
 
       <button
         ref={ref}
@@ -154,13 +155,13 @@ const Notes = () => {
         <h2> Your Notes</h2>
         {notes?.length > 0 ? (
           notes.map((note) => (
-            <Noteitem key={note._id} updateNote={updateNote} note={note} />
+            <Noteitem key={note._id} updateNote={updateNote} showAlert = {props.showAlert} note={note} />
           ))
         ) : (
           <p>No notes available</p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
