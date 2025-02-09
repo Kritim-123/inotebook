@@ -63,8 +63,7 @@ const Navbar = () => {
             </form>
           ) : (
             <button onClick={handleLogout} className="btn btn-primary">
-              {" "}
-              Logout{" "}
+              Logout
             </button>
           )}
         </div>
