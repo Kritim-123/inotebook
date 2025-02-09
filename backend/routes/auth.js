@@ -30,8 +30,8 @@ authRoute.post(
       // Check if user already exists
       let existingUser = await User.findOne({ email: req.body.email });
       if (existingUser) {
-        success = false
-        return res.status(400).json({success,  error: "Email already exists" });
+        success = false;
+        return res.status(400).json({ success, error: "Email already exists" });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -51,10 +51,10 @@ authRoute.post(
       };
       const authToken = jwt.sign(data, JWT_SECRET); //signing the token using my secret key
       success = true;
-      res.json({success, authToken});
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error);
-      res.status(500).json({success, error: "Server error" });
+      res.status(500).json({ success, error: "Server error" });
     }
   }
 );
@@ -81,18 +81,24 @@ authRoute.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
-        success = false
+        success = false;
         return res
           .status(400)
-          .json({success,  error: "Please try to login with correct credentials" });
+          .json({
+            success,
+            error: "Please try to login with correct credentials",
+          });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        success = false
+        success = false;
         return res
           .status(400)
-          .json({ success, error: "Please try to login with correct credentials" });
+          .json({
+            success,
+            error: "Please try to login with correct credentials",
+          });
       }
 
       const data = {
@@ -103,11 +109,10 @@ authRoute.post(
 
       const authToken = jwt.sign(data, JWT_SECRET); //signing the token using my secret key
       success = true;
-      res.json({success, authToken});
-
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error);
-      res.status(500).json({success,  error: "Internal server error" });
+      res.status(500).json({ success, error: "Internal server error" });
     }
   }
 );

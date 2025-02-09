@@ -11,15 +11,13 @@ const Notes = (props) => {
   let navigate = useNavigate();
 
   useEffect(() => {
+    if (localStorage.getItem("logintoken")) {
+      console.log(localStorage.getItem("logintoken"));
+      getNotes();
+    } else {
+      navigate("/login");
+    }
 
-    if (localStorage.getItem('logintoken')){
-      console.log(localStorage.getItem('logintoken'))
-      getNotes()
-    }
-    else{
-      navigate("/login")
-    }
-    
     // eslint-disable-next-line
   }, []);
 
@@ -53,7 +51,7 @@ const Notes = (props) => {
 
   return (
     <div className="container mx-5">
-      <AddNote showAlert = {props.showAlert}/>
+      <AddNote showAlert={props.showAlert} />
 
       <button
         ref={ref}
@@ -165,7 +163,12 @@ const Notes = (props) => {
         <h2> Your Notes</h2>
         {notes?.length > 0 ? (
           notes.map((note) => (
-            <Noteitem key={note._id} updateNote={updateNote} showAlert = {props.showAlert} note={note} />
+            <Noteitem
+              key={note._id}
+              updateNote={updateNote}
+              showAlert={props.showAlert}
+              note={note}
+            />
           ))
         ) : (
           <p>No notes available</p>

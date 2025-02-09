@@ -16,8 +16,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          localStorage.getItem('logintoken'),
+        "auth-token": localStorage.getItem("logintoken"),
       },
     });
 
@@ -35,8 +34,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          localStorage.getItem('logintoken'),
+        "auth-token": localStorage.getItem("logintoken"),
       },
 
       body: JSON.stringify({ title, description, tag }),
@@ -56,8 +54,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          localStorage.getItem('logintoken'),
+        "auth-token": localStorage.getItem("logintoken"),
       },
     });
     const newNote = notes.filter((note) => {
@@ -76,8 +73,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          localStorage.getItem('logintoken'),
+        "auth-token": localStorage.getItem("logintoken"),
       },
 
       body: JSON.stringify({ title, description, tag }),

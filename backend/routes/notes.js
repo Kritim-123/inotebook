@@ -117,10 +117,8 @@ noteRoute.delete("/deletenote/:id", fetchuser, async (req, res) => {
       return res.status(401).send("Not allowed");
     }
 
-    note = await Notes.findByIdAndDelete(
-      req.params.id
-    );
-    res.json({ "Success" : "Note has been deleted", note : note});
+    note = await Notes.findByIdAndDelete(req.params.id);
+    res.json({ Success: "Note has been deleted", note: note });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
